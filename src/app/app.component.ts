@@ -5,6 +5,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AppBaseComponent } from './base-component/app-base.component';
 import { MatDialog } from '@angular/material/dialog';
+import { EnterPromptComponent } from './enter-prompt/enter-prompt.component';
+import { PromptRequest } from './models/prompt-request.model';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,7 @@ export class AppComponent extends AppBaseComponent implements OnInit {
   // @ts-ignore
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   sortedData = new MatTableDataSource();
-  displayedColumns: string[] = ['fileId', 'fileName'];
+  displayedColumns: string[] = ['fileId', 'fileName', 'buttons'];
 
   constructor(
     private dataService: DataService,
@@ -31,15 +33,30 @@ export class AppComponent extends AppBaseComponent implements OnInit {
 
   async refreshData() {
     setTimeout(async () => {
-      //this.showSpinner();
+      this.showSpinner();
       const data = await this.dataService.getCvFiles();
       this.sortedData.data = data;
       console.log(data);
-      // this.closeSpinner();
+      this.closeSpinner();
     });
   }
 
   sortData(sort: Sort): void {
 
+  }
+
+  async editRecord(fileId: number) {
+    const dialogResult = await EnterPromptComponent.show(this.dialog, '');
+    console.log(dialogResult);
+    if (dialogResult && dialogResult !== '') {
+      this.showSpinner();
+      const promptRequest = new PromptRequest();
+      promptRequest.DocumentId = fileId;
+      promptRequest.Prompt = dialogResult;
+      const modifiedDocument = await this.dataService.sendPrompt(promptRequest);
+      console.log(modifiedDocument);
+      this.closeSpinner();
+      window.open(modifiedDocument, "_blank");
+    }
   }
 }

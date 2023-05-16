@@ -11,6 +11,14 @@
             <th *matHeaderCellDef mat-sort-header> File Name </th>
             <td *matCellDef="let element"> {{element.fileName}} </td>
         </ng-container>
+        <ng-container matColumnDef="buttons">
+            <th *matHeaderCellDef></th>
+            <td *matCellDef="let element">
+                <button *ngIf="element.id" class="hourly__mat-button" mat-button (click)=editRecord(element.id)>
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </td>
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
