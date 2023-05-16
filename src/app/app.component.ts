@@ -19,7 +19,7 @@ export class AppComponent extends AppBaseComponent implements OnInit {
   // @ts-ignore
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   sortedData = new MatTableDataSource();
-  displayedColumns: string[] = ['fileId', 'fileName', 'buttons'];
+  displayedColumns: string[] = ['fileName', 'buttons'];
 
   constructor(
     private dataService: DataService,
@@ -33,11 +33,16 @@ export class AppComponent extends AppBaseComponent implements OnInit {
 
   async refreshData() {
     setTimeout(async () => {
-      this.showSpinner();
-      const data = await this.dataService.getCvFiles();
-      this.sortedData.data = data;
-      console.log(data);
-      this.closeSpinner();
+      try {
+        this.showSpinner();
+        const data = await this.dataService.getCvFiles();
+        this.sortedData.data = data;
+        console.log(data);
+        this.closeSpinner();
+      } catch (error) {
+        console.log(error);
+        this.closeSpinner();
+      }
     });
   }
 
@@ -45,18 +50,23 @@ export class AppComponent extends AppBaseComponent implements OnInit {
 
   }
 
-  async editRecord(fileId: number) {
+  async editRecord(fileId: string) {
     const dialogResult = await EnterPromptComponent.show(this.dialog, '');
     console.log(dialogResult);
     if (dialogResult && dialogResult !== '') {
-      this.showSpinner();
-      const promptRequest = new PromptRequest();
-      promptRequest.DocumentId = fileId;
-      promptRequest.Prompt = dialogResult;
-      const modifiedDocument = await this.dataService.sendPrompt(promptRequest);
-      console.log(modifiedDocument);
-      this.closeSpinner();
-      window.open(modifiedDocument, "_blank");
+      try {
+        this.showSpinner();
+        const promptRequest = new PromptRequest();
+        promptRequest.DocumentId = fileId;
+        promptRequest.Prompt = dialogResult;
+        const modifiedDocument = await this.dataService.sendPrompt(promptRequest);
+        console.log(modifiedDocument);
+        this.closeSpinner();
+        window.open(modifiedDocument, "_blank");
+      } catch (error) {
+        console.log(error);
+        this.closeSpinner();
+      }
     }
   }
 }

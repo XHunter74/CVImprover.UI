@@ -1,4 +1,4 @@
 export class PromptRequest {
-    DocumentId: number = -1;
+    DocumentId: string = '';
     Prompt: string = '';
 }

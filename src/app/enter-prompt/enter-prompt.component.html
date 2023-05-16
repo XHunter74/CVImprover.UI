@@ -2,7 +2,8 @@
     <mat-dialog-content>
         <div class="form-group row">
             <label class="control-label" style="width: 90px;" for="eventTimeField">Prompt: </label>
-            <input id="promptField" formControlName="promptField" required class="prompt-control" [autofocus] type="text">
+            <textarea id="promptField" formControlName="promptField" required class="prompt-control" [autofocus]
+                type="text" rows="7"></textarea>
             <!-- <div *ngIf="promptField.invalid && (promptField.dirty || promptField.touched)"
                 class="alert alert-danger">
                 <div *ngIf="promptField?.errors['required']">

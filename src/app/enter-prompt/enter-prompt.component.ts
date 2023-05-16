@@ -32,7 +32,7 @@ export class EnterPromptComponent implements OnInit {
     static async show(dialog: MatDialog, data?: string): Promise<string> {
         const dialogRef = dialog.open(EnterPromptComponent, {
             width: '700px',
-            height: '200px',
+            height: '300px',
             maxHeight: '700px',
             data
         });

@@ -1,4 +1,4 @@
 export class FileModel {
-    id: number = -1;
+    id: string = '';
     fileName: string = '';
 }
